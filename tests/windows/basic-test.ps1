@@ -44,6 +44,7 @@ try {
     # Convert the bytes to a string
     $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)
 
+    write-host "Header: $headerString"
     # Check if the header matches the git-crypt magic header
     if ($headerString -eq "`0GITCRYPT") {
         Write-Host "nonempty.txt is encrypted"
