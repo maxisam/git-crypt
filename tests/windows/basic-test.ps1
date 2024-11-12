@@ -32,15 +32,9 @@ try {
     # Lock files
     git crypt lock
 
-    # Verify that nonempty.txt is encrypted
-    # Read the first 8 bytes of the file
-    $bytes = Get-Content -Path nonempty.txt -Encoding Byte -TotalCount 8
-
-    # Convert the bytes to a string
-    $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)
-
-    # Check if the header matches the git-crypt magic header
-    if ($headerString -eq "`0GITCRYPT") {
+    # Verify that files are encrypted
+    $nonemptyContent = Get-Content -Path nonempty.txt -Encoding Byte
+    if ($nonemptyContent[0..7] -eq [byte[]](0x00,0x47,0x49,0x54,0x43,0x52,0x59,0x50)) {
         Write-Host "nonempty.txt is encrypted"
     } else {
         Write-Error "nonempty.txt is not encrypted"
@@ -49,14 +43,13 @@ try {
     # Unlock files
     git crypt unlock
 
-    # Verify that nonempty.txt is decrypted correctly
+    # Verify that files are decrypted
     $content = Get-Content -Path nonempty.txt
     if ($content -eq "Hello, world!") {
         Write-Host "nonempty.txt is decrypted correctly"
     } else {
         Write-Error "nonempty.txt is not decrypted correctly"
     }
-
 } finally {
     Pop-Location
     Remove-Item -Recurse -Force $TEST_DIR
