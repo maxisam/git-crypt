@@ -30,6 +30,8 @@ git config --global init.defaultBranch main
 git init
 git config user.email "fake-email@gmail.com"
 git config user.name "Fake Name"
+# Enable worktree configuration to allow git-crypt to work in worktrees
+git config extensions.worktreeConfig true  
 # Initialize git-crypt
 git crypt init
 # export key
