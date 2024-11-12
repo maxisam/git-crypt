@@ -1,4 +1,4 @@
-# test/basic-test.ps1
+# tests/windows/basic-test.ps1
 $ErrorActionPreference = "Stop"
 
 # Export the built git-crypt.exe to PATH
@@ -6,6 +6,8 @@ $env:PATH = "$PWD;" + $env:PATH
 
 # Create a temporary directory for testing
 $TEST_DIR = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid().ToString())
+Write-Host "TEST_DIR: $TEST_DIR"
+
 New-Item -ItemType Directory -Path $TEST_DIR | Out-Null
 Push-Location $TEST_DIR
 
@@ -28,13 +30,16 @@ try {
     # Add and commit files
     git add .gitattributes nonempty.txt
     git commit -m 'Add files'
-
+    write-host "Locking files with git-crypt..."
     # Lock files
     git crypt lock
 
     # Verify that nonempty.txt is encrypted
-    # Read the first 8 bytes of the file using .NET method
-    $bytes = [System.IO.File]::ReadAllBytes("nonempty.txt")[0..7]
+    Write-Host "Current directory: $(Get-Location)"
+    $nonemptyFilePath = "$TEST_DIR\nonempty.txt"
+    Write-Host "nonempty.txt path: $nonemptyFilePath"
+
+    $bytes = [System.IO.File]::ReadAllBytes($nonemptyFilePath)[0..7]
 
     # Convert the bytes to a string
     $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)
@@ -47,10 +52,11 @@ try {
     }
 
     # Unlock files
+    Write-Host "Unlocking files with git-crypt..."
     git crypt unlock
 
     # Verify that nonempty.txt is decrypted correctly
-    $content = Get-Content -Path nonempty.txt
+    $content = Get-Content -Path $nonemptyFilePath
     if ($content -eq "Hello, world!") {
         Write-Host "nonempty.txt is decrypted correctly"
     } else {
