@@ -5,6 +5,7 @@ $ErrorActionPreference = "Stop"
 $env:PATH = "$PWD;" + $env:PATH
 
 # Create a temporary directory for testing
+$TEMP_DIR = [System.IO.Path]::GetTempPath()
 $TEST_DIR = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid().ToString())
 Write-Host "TEST_DIR: $TEST_DIR"
 
@@ -20,7 +21,8 @@ try {
 
     # Initialize git-crypt
     git crypt init
-
+    # export the key to $TEMP_DIR
+    git crypt export-key $TEMP_DIR/key.gitcrypt  
     # Set up .gitattributes
     Set-Content -Path .gitattributes -Value "*.txt filter=git-crypt diff=git-crypt"
 
@@ -54,7 +56,7 @@ try {
 
     # Unlock files
     Write-Host "Unlocking files with git-crypt..."
-    git crypt unlock
+    git crypt unlock $TEMP_DIR/key.gitcrypt
 
     # Verify that nonempty.txt is decrypted correctly
     $content = Get-Content -Path $nonemptyFilePath

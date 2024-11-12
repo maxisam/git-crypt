@@ -16,6 +16,8 @@ git config user.email "fake-email@gmail.com"
 git config user.name "Fake Name"
 # Initialize git-crypt
 git crypt init
+# export key
+git crypt export-key ../key.gitcrypt
 
 # Set up .gitattributes
 echo "*.txt filter=git-crypt diff=git-crypt" > .gitattributes
@@ -38,7 +40,7 @@ else
 fi
 
 # Unlock files
-git crypt unlock
+git crypt unlock ../key.gitcrypt
 
 # Verify that files are decrypted
 if [ "$(cat nonempty.txt)" = "Hello, world!" ]; then
