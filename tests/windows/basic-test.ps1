@@ -39,7 +39,7 @@ try {
     $nonemptyFilePath = "$TEST_DIR\nonempty.txt"
     Write-Host "nonempty.txt path: $nonemptyFilePath"
 
-    $bytes = [System.IO.File]::ReadAllBytes($nonemptyFilePath)[0..7]
+    $bytes = [System.IO.File]::ReadAllBytes($nonemptyFilePath)[0..8]
 
     # Convert the bytes to a string
     $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)

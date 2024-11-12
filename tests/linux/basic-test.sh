@@ -30,3 +30,20 @@ git commit -m 'Add files'
 # Lock files
 git crypt lock
 
+if xxd nonempty.txt | grep -q 'GITCRYPT'; then
+  echo "nonempty.txt is encrypted"
+else
+  echo "nonempty.txt is not encrypted"
+  exit 1
+fi
+
+# Unlock files
+git crypt unlock
+
+# Verify that files are decrypted
+if [ "$(cat nonempty.txt)" = "Hello, world!" ]; then
+  echo "nonempty.txt is decrypted correctly"
+else
+  echo "nonempty.txt is not decrypted correctly"
+  exit 1
+fi
