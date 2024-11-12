@@ -10,10 +10,10 @@ trap "rm -rf $TEST_DIR" EXIT
 cd $TEST_DIR
 
 # Configure git
+git config --global init.defaultBranch main
 git init
 git config user.email "fake-email@gmail.com"
 git config user.name "Fake Name"
-git config --global init.defaultBranch main
 # Initialize git-crypt
 git crypt init
 

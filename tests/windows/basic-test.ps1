@@ -11,10 +11,10 @@ Push-Location $TEST_DIR
 
 try {
     # Configure git
+    git config --global init.defaultBranch main
     git init
     git config user.email "fake-email@gmail.com"
     git config user.name "Fake Name"
-    git config --global init.defaultBranch main
 
     # Initialize git-crypt
     git crypt init
@@ -32,8 +32,15 @@ try {
     # Lock files
     git crypt lock
 
-    # Verify that nonempty.txt is encrypted using Select-String
-    if (Select-String -Path nonempty.txt -Pattern '\x00GITCRYPT' -SimpleMatch -Encoding Byte) {
+    # Verify that nonempty.txt is encrypted
+    # Read the first 8 bytes of the file
+    $bytes = Get-Content -Path nonempty.txt -Encoding Byte -TotalCount 8
+
+    # Convert the bytes to a string
+    $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)
+
+    # Check if the header matches the git-crypt magic header
+    if ($headerString -eq "`0GITCRYPT") {
         Write-Host "nonempty.txt is encrypted"
     } else {
         Write-Error "nonempty.txt is not encrypted"
