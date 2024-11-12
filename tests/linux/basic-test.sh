@@ -23,7 +23,7 @@ cleanup() {
 trap cleanup EXIT
 
 # Change to the repository root
-cd "$REPO_ROOT"
+cd "$REPO_DIR"
 
 # Configure git
 git config --global init.defaultBranch main
