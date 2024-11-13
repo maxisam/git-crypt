@@ -125,18 +125,22 @@ fi
 
 echo "::notice:: ✅ Passed worktree test"
 
-echo "test compatibility with git-crypt 0.7.0"
+echo "test compatibility with git-crypt 0.7.0..."
 
 cd "$PWD"
 # clean git changes
 git reset --hard
 
+# show current path
 echo "current path: $PWD"
 
-git status | grep -q "nothing to commit" || {
-    echo "git status is not clean"
+# show current git status
+echo "current git status: $(git status)"
+# check if key is present
+if [ ! -f "$PWD/tests/key.gitcrypt" ]; then
+    echo "key.gitcrypt is not found"
     exit 1
-}
+fi
 
 git crypt unlock "$PWD/tests/key.gitcrypt"
 # check if tests/fake.test.secrets is decrypted
