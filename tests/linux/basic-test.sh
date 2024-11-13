@@ -131,9 +131,14 @@ cd "$PWD"
 # clean git changes
 git reset --hard
 
-git status
+echo "current path: $PWD"
 
-git crypt unlock "./tests/key.gitcrypt"
+git status | grep -q "nothing to commit" || {
+    echo "git status is not clean"
+    exit 1
+}
+
+git crypt unlock "$PWD/tests/key.gitcrypt"
 # check if tests/fake.test.secrets is decrypted
 
 if xxd "./tests/fake.test.secrets" | grep -q 'GITCRYPT'; then
