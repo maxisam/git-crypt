@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+REPO_HOME="$PWD"
 # Export the built git-crypt binary to PATH
 export PATH="$PWD:$PATH"
 
@@ -128,12 +128,12 @@ echo "::notice:: ✅ Passed worktree test"
 echo "test compatibility with git-crypt 0.7.0..."
 
 # move to original repo
-cd "$PWD"
+cd "$REPO_HOME"
 # show current path
-echo "current path: $PWD"
+echo "current path: $REPO_HOME"
 
 # check if key is present
-if [ ! -f "$PWD/tests/key.gitcrypt" ]; then
+if [ ! -f "$REPO_HOME/tests/key.gitcrypt" ]; then
     echo "key.gitcrypt is not found"
     exit 1
 fi
@@ -145,7 +145,7 @@ git reset --hard
 # show current git status
 echo "current git status: $(git status)"
 
-git crypt unlock "$PWD/tests/key.gitcrypt"
+git crypt unlock "$REPO_HOME/tests/key.gitcrypt"
 # check if tests/fake.test.secrets is decrypted
 
 if xxd "./tests/fake.test.secrets" | grep -q 'GITCRYPT'; then
