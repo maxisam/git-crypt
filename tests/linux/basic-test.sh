@@ -124,3 +124,19 @@ else
 fi
 
 echo "::notice:: ✅ Passed worktree test"
+
+echo "test compatibility with git-crypt 0.7.0"
+
+cd "$PWD"
+
+git crypt unlock "./tests/key.gitcrypt"
+# check if tests/fake.test.secrets is decrypted
+
+if xxd "./tests/fake.test.secrets" | grep -q 'GITCRYPT'; then
+    echo "fake.test.secrets is encrypted"
+    exit 1
+else
+    echo "fake.test.secrets is decrypted"
+    echo "::notice:: ✅ Passed compatibility test"
+fi
+

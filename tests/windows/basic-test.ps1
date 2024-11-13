@@ -126,6 +126,25 @@ try {
 
     Write-Host "::notice:: ✅ Passed worktree test"
 
+    # Test compatibility with git-crypt 0.7.0
+    Write-Host "Testing compatibility with git-crypt 0.7.0..."
+    
+    Set-Location "$PWD"
+    git crypt unlock "./tests/key.gitcrypt"
+
+    # Check if the test file is properly decrypted
+    $testFilePath = "./tests/fake.test.secrets"
+    $bytes = [System.IO.File]::ReadAllBytes($testFilePath)[0..8]
+    $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)
+
+    if ($headerString -eq "`0GITCRYPT") {
+        Write-Error "fake.test.secrets is still encrypted"
+        exit 1
+    } else {
+        Write-Host "fake.test.secrets is decrypted"
+        Write-Host "::notice:: ✅ Passed compatibility test"
+    }
+
 } finally {
     Pop-Location
     Remove-Item -Recurse -Force $TEST_DIR
