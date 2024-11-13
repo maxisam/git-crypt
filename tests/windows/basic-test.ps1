@@ -146,11 +146,10 @@ try {
         exit 1
     } else {
         Write-Host "fake.test.secrets is decrypted"
-        Write-Host "::notice:: ✅ Passed compatibility test"
+        Write-Host "::notice:: ✅ Passed 0.7.0 compatibility test"
     }
 
 } finally {
-    Pop-Location
     Remove-Item -Recurse -Force $TEST_DIR
 }
 

@@ -141,6 +141,6 @@ if xxd "./tests/fake.test.secrets" | grep -q 'GITCRYPT'; then
     exit 1
 else
     echo "fake.test.secrets is decrypted"
-    echo "::notice:: ✅ Passed compatibility test"
+    echo "::notice:: ✅ Passed  0.7.0 compatibility test"
 fi
 
