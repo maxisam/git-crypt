@@ -129,23 +129,11 @@ echo "test compatibility with git-crypt 0.7.0..."
 
 # move to original repo
 cd "$REPO_HOME"
-# show current path
-echo "current path: $REPO_HOME"
-
-# check if key is present
-if [ ! -f "$REPO_HOME/tests/key.gitcrypt" ]; then
-    echo "key.gitcrypt is not found"
-    exit 1
-fi
 
 # clean git changes
 git reset --hard
 
-
-# show current git status
-echo "current git status: $(git status)"
-
-git crypt unlock "$REPO_HOME/tests/key.gitcrypt"
+git crypt unlock "./tests/key.gitcrypt"
 # check if tests/fake.test.secrets is decrypted
 
 if xxd "./tests/fake.test.secrets" | grep -q 'GITCRYPT'; then

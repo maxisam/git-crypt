@@ -4,6 +4,7 @@ $ErrorActionPreference = "Stop"
 # Export the built git-crypt.exe to PATH
 $env:PATH = "$PWD;" + $env:PATH
 
+$REPO_HOME = "$PWD"
 # Create a temporary directory for testing
 $TEMP_DIR = [System.IO.Path]::GetTempPath()
 $TEST_DIR = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid().ToString())
@@ -129,15 +130,14 @@ try {
     # Test compatibility with git-crypt 0.7.0
     Write-Host "Testing compatibility with git-crypt 0.7.0..."
     
-    Push-Location "$PWD"
+    Push-Location "$REPO_HOME"
+
     git reset --hard
 
-    git status 
-    
-    git crypt unlock "./tests/key.gitcrypt"
+    git crypt unlock ".\tests\key.gitcrypt"
 
     # Check if the test file is properly decrypted
-    $testFilePath = "./tests/fake.test.secrets"
+    $testFilePath = ".\tests\fake.test.secrets"
     $bytes = [System.IO.File]::ReadAllBytes($testFilePath)[0..8]
     $headerString = [System.Text.Encoding]::ASCII.GetString($bytes)
 
