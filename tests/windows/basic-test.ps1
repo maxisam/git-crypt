@@ -129,7 +129,8 @@ try {
     # Test compatibility with git-crypt 0.7.0
     Write-Host "Testing compatibility with git-crypt 0.7.0..."
     
-    Set-Location "$PWD"
+    Push-Location "$PWD"
+    git reset --hard
     git crypt unlock "./tests/key.gitcrypt"
 
     # Check if the test file is properly decrypted
