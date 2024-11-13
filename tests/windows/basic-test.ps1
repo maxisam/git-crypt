@@ -131,6 +131,9 @@ try {
     
     Push-Location "$PWD"
     git reset --hard
+
+    git status 
+    
     git crypt unlock "./tests/key.gitcrypt"
 
     # Check if the test file is properly decrypted
