@@ -31,7 +31,7 @@ jobs:
         id: prep_artifact
         run: |
           # Use runner.arch which resolves to 'x64' or 'arm64'
-          FINAL_NAME="git-crypt-${{ github.ref_name }}-darwin-${{ runner.arch }}"
+          FINAL_NAME="git-crypt-${{ github.run_number }}-darwin-${{ runner.arch }}"
           
           # Append '-dev' suffix for non-release builds (e.g., PRs)
           if [[ "${{ github.event_name }}" != 'release' ]]; then
